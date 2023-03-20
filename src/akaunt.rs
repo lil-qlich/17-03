@@ -1,43 +1,45 @@
 use crate::{Admin, Client};
 use std::io;
+use std::env;
 use std::fs::File;
 use std::io::{Write, BufReader, BufRead, Error};
-use std::{fs::{File, OpenOptions}, io::{Write, stdin, Read}};
+use std::ptr::read;
+use std::{fs::{OpenOptions}, io::{stdin, Read}};
 use std::os::windows::prelude::FileExt;
 use crate::check_choise;
-
+use std::fs;
 pub fn entrance(entrance1:String, admin1: String, admin2:  String, client2: String, client3: String,
 client4: String, client5: String){
 println!("What is your name?");
-let mut entrance: String = String::new();
-io::stdin().read_line(&mut entrance).unwrap();
-let entrance:String = entrance.trim().parse().unwrap();
+// let mut entrance: String = String::new();
+// io::stdin().read_line(&mut entrance).unwrap();
+// let mut entrance:String = entrance.trim().parse().unwrap();
+let mut check_logins = String::new();
+io::stdin().read_line(&mut check_logins).unwrap();
+let mut all_logins = File::open(r"C:\Users\sajan\OneDrive\Рабочий стол\Колледж\АР\17-03\src\account.txt").unwrap();
+all_logins.read_to_string(&mut check_logins).unwrap();
 // запрос строки
-if entrance == "Blesk" {
+if check_logins.contains("Blesk")&& check_logins == "Blesk"{
 println!("Welcome, {}", admin1);
-println!("изменения дадад Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины - \n Добавление товара в каталог и изменение количества товара: Редактор корзины + \n Удаление товара из каталога: Редактор каталога \n Изменить цену товара: Редактор цен \n Помощь по магазину \n Exit - выход ");
+println!("Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины - \n Добавление товара в каталог и изменение количества товара: Редактор корзины + \n Удаление товара из каталога: Редактор каталога \n Изменить цену товара: Редактор цен \n Помощь по магазину \n Exit - выход ");
 }
-else if entrance == "Sajaba" {
+else if check_logins.contains("Sajaba") && check_logins == "Sajaba" {
 println!("Welcome, {}", admin2);
 println!("Приветствую");
 println!("Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины - \n Добавление товара в каталог и изменение количества товара: Редактор корзины + \n Удаление товара из каталога: Редактор каталога \n Изменить цену товара: Редактор цен \n Помощь по магазину \n Exit - выход ");
 }
-else if entrance == "Timur" {
-println!("Welcome, {}", client2);
-println!("Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины \n Помощь по магазину \n Exit - выход ");
+else if check_logins.contains(&check_logins){
+    println!("Welcome");
+    println!("Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины - \n Если же Вам нужна будет психологическая помощь наших операторов, то напишите: Псих.помощь \n Exit - выход ");
 }
-else if entrance == "Max" {
-println!("Welcome, {}", client3);
-println!("Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины  \n Помощь по магазину \n Exit - выход ");
+else {
+    println!("Вы не зарегистрированы в нашем магазине, пожалуйста пройдите регистрацию");
+    return reg();
 }
-else if entrance == "Artem" {
-println!("Welcome, {}", client4);
-println!("попа Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины \n Exit - выход ");
-}
-else if entrance == "DeadInside" {
-println!("Welcome, {}", client5);
-println!("Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины - \n Если же Вам нужна будет психологическая помощь наших операторов, то напишите: Псих.помощь \n Exit - выход ");
-}
+// else if entrance == "DeadInside" {
+// println!("Welcome, {}", client5);
+// println!("Вам доступны следующие функции: \n Просмотр товаров: Просмотр \n Просмотр вашей корзины: Корзина \n Пополнить и просмотреть ваш баланс: Баланс \n Перейти к оформлению заказа: Заказать \n Удаление товаров из корзины: Редактор корзины - \n Если же Вам нужна будет психологическая помощь наших операторов, то напишите: Псих.помощь \n Exit - выход ");
+// }
 
 }
 
@@ -90,8 +92,8 @@ return entrance(entrance1, admin1, admin2, client2, client3, client4, client5);
 //             return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
 //         }
 //         else if psihh.trim() == "6" {
-//             println!("Возможно для полного счастья и умиротворения вам не хватает отдыха или новых эмоций, пробуйте!");
-//             return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+            // println!("Возможно для полного счастья и умиротворения вам не хватает отдыха или новых эмоций, пробуйте!");
+            // return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
 //         }
 //         else if psihh.trim() == "7" {
 //             println!("Возможно для полного счастья и умиротворения вам не хватает отдыха или новых эмоций, пробуйте!");
@@ -136,9 +138,14 @@ pub fn shop_help(buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, prices:
         return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
     }
 }
+
 pub fn reg(){
-    println!("Приветсвуем с уважением в нашем магазине! Введите логин вашего аккаунта");
+    println!("Приветствуем с уважением в нашем магазине! Введите логин вашего аккаунта");
+    let mut f = OpenOptions::new().read(true).write(true).create(true).append(true).open(r"C:\Users\sajan\OneDrive\Рабочий стол\Колледж\АР\17-03\src\account.txt").expect("msg");
     let mut new_login = String::new();
-    io::stdin().read_line(&mut new_login);
-    let logins = "account.txt"
+    let mut news = new_login.as_bytes();
+    io::stdin().read_line(&mut new_login).expect("error");
+    // f.write_all(new_login.as_bytes()).expect("msg");
+    f.write(new_login.as_bytes()).expect("msg");
+    
 }
