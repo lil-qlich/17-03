@@ -1,8 +1,7 @@
-
 use crate::{check_choise};
 use std::{io};
 
-pub fn buy_product(check_buy:String,mut buy:Vec<String>,spisok2:Vec<String>, shop_balance:u64, prices:Vec<u64>,ask_choise:String, spisok:Vec<String>,mut quantitys:Vec<u64>, korzina:Vec<String> ){
+pub fn buy_product(check_buy:String,mut buy:Vec<String>,spisok2:Vec<String>, shop_balance:u64, prices:Vec<u64>,ask_choise:String, spisok:Vec<String>,mut quantitys:Vec<u64>, korzina:Vec<String>, balance:u128 ){
     if check_buy.trim() == "Купить" {
         println!("Введите номер товара, 1-ый товар начинается с '0'");
         let mut check2 = String::new();
@@ -19,20 +18,28 @@ pub fn buy_product(check_buy:String,mut buy:Vec<String>,spisok2:Vec<String>, sho
         let new_quantity = quantitys[check] - check_quantity2;
         quantitys[check] = new_quantity;
         println!("Ваша корзина:");
+        if new_quantity <= 0{
+            println!("У нас нету такого количества товара, попробуйте еще раз");
+            return;
+        }
+        else {
+            
         for products in &buy{
             println!("{}", products);
         }
         println!("Ваши покупки на сумму: {}", shop_balance); 
         println!("Введите то, что вы хотите сделать");
-        return check_choise( shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+        return check_choise( shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance);
                 }
+            }
         else {
-            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+            println!("Введите, то что вы хотите сделать");
+            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance);
         }
     }
 
 
-pub fn delete_product(mut buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, prices:Vec<u64>, spisok:Vec<String>, quantitys:Vec<u64>, korzina:Vec<String>){
+pub fn delete_product(mut buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, prices:Vec<u64>, spisok:Vec<String>, quantitys:Vec<u64>, korzina:Vec<String>, balance:u128){
     println!("Введите номер товара, который хотите удалить");
     let mut check_delete = String::new();
     io::stdin().read_line(&mut check_delete).unwrap();
@@ -43,14 +50,14 @@ pub fn delete_product(mut buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>
         for i in &buy{
             println!("{}",i);
         }
-        return check_choise( shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+        return check_choise( shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance);
     }
     else {
         println!("Такого товара нету в вашей корзине");
-        return check_choise( shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+        return check_choise( shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance);
     }
 }
-pub fn edit_catalog( buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, prices:Vec<u64>,mut spisok:Vec<String>, mut quantitys:Vec<u64>, mut korzina:Vec<String>) {
+pub fn edit_catalog( buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, prices:Vec<u64>,mut spisok:Vec<String>, mut quantitys:Vec<u64>, mut korzina:Vec<String>,balance:u128) {
         println!("Введите то, что вы хотите сделать \n 'Добавить товар', \n 'Изменить количество товара'");
         let mut check_edit = String::new();
         io::stdin().read_line(&mut check_edit).unwrap();
@@ -70,7 +77,7 @@ pub fn edit_catalog( buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, pri
             for i in &quantitys{
                 println!("{}",i);
             }
-            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance);
         }
         else if check_edit.trim() == "Изменить количество товара" {
             println!("Введите номер товара, количество которого вы хотите отредактировать");
@@ -82,14 +89,14 @@ pub fn edit_catalog( buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, pri
             io::stdin().read_line(&mut edit_kol_tovara).unwrap();
             let edit_kol_tovara: u64 = edit_kol_tovara.trim().parse().unwrap();
             quantitys[check_edits2] = edit_kol_tovara;
-            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance);
         }
         else {
             println!("Повторите попытку");
-            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+            return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance);
         }
 }
-pub fn delete_products(buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, prices:Vec<u64>,mut spisok:Vec<String>, mut quantitys:Vec<u64>, korzina:Vec<String>){
+pub fn delete_products(buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, prices:Vec<u64>,mut spisok:Vec<String>, mut quantitys:Vec<u64>, korzina:Vec<String>, balance:u128){
     println!("Введите номер товара, который вы хотите удалить из каталога");
     let mut check_delete_products = String::new();
     io::stdin().read_line(&mut check_delete_products).unwrap();
@@ -99,5 +106,5 @@ pub fn delete_products(buy:Vec<String>, shop_balance:u64, spisok2:Vec<String>, p
     for i in &buy{
         println!("{}", i);
     }
-    return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina);
+    return check_choise(shop_balance, spisok2, buy, prices, spisok, quantitys, korzina, balance );
 }
